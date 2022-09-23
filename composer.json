@@ -1,0 +1,31 @@
+{
+    "name": "unl-libraries/cakephp-casauthenticator",
+    "description": "CAS Authenticator wrapper for CakePHP 4.x using Apereo (formerly Jasig) phpCAS",
+    "kewords": ["CAS", "authentication"],
+    "type": "cakephp-plugin",
+    "authors": [
+      {
+        "name": "UNL Libraries IT",
+        "homepage": "https://libraries.unl.edu",
+        "role": "Maintainer"
+      },
+      {
+        "name": "Stacy Rickel",
+        "email": "srickel1@unl.edu",
+        "role": "Developer"
+      }
+    ],
+    "minimum-stability": "dev",
+    "require": {
+        "php": ">=7.4",
+        "cakephp/cakephp": "^4.0.0",
+        "apereo/phpcas": "~1.4.0"
+    },
+    "require-dev": {
+    },
+    "autoload": {
+        "psr-4": {
+            "CasAuthenticator\\": "src"
+        }
+    }
+}
