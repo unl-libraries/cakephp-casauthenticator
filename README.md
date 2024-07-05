@@ -7,9 +7,16 @@ Tested with cakePHP 4.3 and phpCAS 1.6.1
 You can install this plugin into your CakePHP application using
 [composer](https://getcomposer.org):
 
-copy the files into the vendor directory then
+Add the following to your composer.json:
+: in the require section, `"unl-libraries/cakephp-casauthenticator":"dev-master"`
+: add or modify the repositories section to refer to this repository:
 ```
-php composer.phar require unl-libraries/cakephp-casauthenticator
+"repositories": [
+	{  	
+		"type":"vcs",
+		"url":"https://github.com/unl-libraries/cakephp-casauthenticator.git"
+	}
+]
 ```
 
 
