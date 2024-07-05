@@ -4,7 +4,10 @@
  */
 namespace CasAuthenticator\Authenticator;
 
-
+use Authentication\Authenticator\AbstractAuthenticator;
+use Authentication\Authenticator\PersistenceInterface;
+use Authentication\Authenticator\ResultInterface;
+use Authentication\Authenticator\Result;
 use Authentication\Identifier\IdentifierInterface;
 use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Message\ServerRequestInterface;
@@ -16,7 +19,8 @@ class CasAuthenticator extends AbstractAuthenticator implements PersistenceInter
     protected $_defaultConfig = [
         'hostname' => null,
         'port' => 443,
-        'uri' => '',
+	'uri' => '',
+	'service_base_url' => '',
         'sessionKey' => 'phpCAS'
     ];
 
@@ -44,7 +48,7 @@ class CasAuthenticator extends AbstractAuthenticator implements PersistenceInter
         //cause problems
         if (!phpCAS::isInitialized()) {
            // if(isset($_SESSION)){
-                phpCAS::client(CAS_VERSION_2_0, $settings['hostname'], $settings['port'], $settings['uri'],false);
+                phpCAS::client(CAS_VERSION_2_0, $settings['hostname'], $settings['port'], $settings['uri'],$settings['service_base_url']);
            // }
             //else phpCAS::client(CAS_VERSION_2_0, $settings['hostname'], $settings['port'], $settings['uri']);
         }

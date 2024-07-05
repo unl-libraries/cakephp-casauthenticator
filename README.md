@@ -1,5 +1,6 @@
 
 Provides CAS Authenticator methods for CakePHP 4
+Tested with cakePHP 4.3 and phpCAS 1.6.1 
 
 ## Installation
 
@@ -25,6 +26,7 @@ $authenticationService->loadAuthenticator('Authentication.Cas',[
             'hostname'=>'cas hostname',
             'port'=>443,
             'uri'=>'cas uri path',
+	    'service_base_url' => '', #include the base url of your service with the protocal such as 'https://server-name.unl.edu'
             'userModel'=>'Users',
             'fields' =>  [
                 'username' => ['username','email']
