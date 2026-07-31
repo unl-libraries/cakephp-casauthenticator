@@ -3,7 +3,7 @@
  * Copyright 2021 Stacy Rickel
  */
 namespace CasAuthenticator\Authenticator;
-
+use ArrayAccess;
 use Authentication\Authenticator\AbstractAuthenticator;
 use Authentication\Authenticator\PersistenceInterface;
 use Authentication\Authenticator\ResultInterface;
@@ -16,12 +16,13 @@ use phpCAS;
 class CasAuthenticator extends AbstractAuthenticator implements PersistenceInterface
 {    
 
-    protected $_defaultConfig = [
+    protected array $_defaultConfig = [
         'hostname' => null,
         'port' => 443,
 	'uri' => '',
 	'service_base_url' => '',
-        'sessionKey' => 'phpCAS'
+	'sessionKey' => 'phpCAS',
+	'debug'=>false
     ];
 
     /**
@@ -36,22 +37,15 @@ class CasAuthenticator extends AbstractAuthenticator implements PersistenceInter
 
         //Get the merged config settings
         $settings = $this->getConfig();
-       
-    
+   	$this->_identifier = $identifier; 
         if (!empty($settings['debug'])) {
-            phpCAS::setDebug(LOGS . 'phpCas.log');
+            phpCAS::setLogger(); //use phpCAS::setLogger();
         }
-
         //The "isInitialized" check isn't necessary during normal use,
         //but during *testing* if Authentication is tested more than once, then
         //the fact that phpCAS uses a static global initialization can
         //cause problems
-        if (!phpCAS::isInitialized()) {
-           // if(isset($_SESSION)){
-                phpCAS::client(CAS_VERSION_2_0, $settings['hostname'], $settings['port'], $settings['uri'],$settings['service_base_url']);
-           // }
-            //else phpCAS::client(CAS_VERSION_2_0, $settings['hostname'], $settings['port'], $settings['uri']);
-        }
+        phpCAS::client(CAS_VERSION_2_0, $settings['hostname'], $settings['port'], $settings['uri'], $settings['service_base_url']);
 
         if (!empty($settings['curlopts'])) {
             foreach ($settings['curlopts'] as $key => $val) {
@@ -74,8 +68,9 @@ class CasAuthenticator extends AbstractAuthenticator implements PersistenceInter
     public function authenticate(ServerRequestInterface $request): ResultInterface
     {
         phpCAS::handleLogoutRequests(false);
-        
+ 
         phpCAS::forceAuthentication();
+
         //If we get here, then phpCAS::forceAuthentication returned
         //successfully and we are thus authenticated
         
@@ -90,7 +85,7 @@ class CasAuthenticator extends AbstractAuthenticator implements PersistenceInter
     /**
      * @inheritDoc
      */
-    public function persistIdentity(ServerRequestInterface $request, ResponseInterface $response, $identity): array
+    public function persistIdentity(ServerRequestInterface $request, ResponseInterface $response, ArrayAccess|array $identity): array
     {
         $sessionKey = $this->getConfig('sessionKey');
         /** @var \Cake\Http\Session $session */
@@ -150,18 +145,6 @@ class CasAuthenticator extends AbstractAuthenticator implements PersistenceInter
         return [
             'request'=>$request->withoutAttribute($this->getConfig('identityAttribute')),
             'response'=>$response,
-        ];
-    }
-    /**
-     * Get the Controller callbacks this Component is interested in.
-     *
-     * @return array
-     */
-    public function implementedEvents(): array
-    {
-        return [
-            'Auth.logout' => 'logout',
-            
         ];
     }
 

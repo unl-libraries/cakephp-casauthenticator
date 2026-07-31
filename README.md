@@ -1,6 +1,6 @@
 
-Provides CAS Authenticator methods for CakePHP 4
-Tested with cakePHP 4.3 and phpCAS 1.6.1 
+Provides CAS Authenticator methods for CakePHP 5
+Tested with cakePHP 5.1 and phpCAS 1.6.2 
 
 ## Installation
 
@@ -29,7 +29,10 @@ Load the authenticator by calling it with the configuration items
 update the userModel if using something other than Users 
 ```
 //try to load the CasAuthenticator
-$authenticationService->loadAuthenticator('Authentication.Cas',[
+
+Note that if you have an identifier that needs to be added to the authenticator call or removed
+ 
+$authenticationService->loadAuthenticator('CasAuthenticator.Cas',[
             'hostname'=>'cas hostname',
             'port'=>443,
             'uri'=>'cas uri path',
@@ -40,5 +43,6 @@ $authenticationService->loadAuthenticator('Authentication.Cas',[
              ],
             'loginUrl' => Router::url('/users/login'),
             'logoutRedirect' => Router::url('/pages/home')
+		
         ]);
 ```
