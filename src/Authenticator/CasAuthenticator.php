@@ -45,8 +45,9 @@ class CasAuthenticator extends AbstractAuthenticator implements PersistenceInter
         //but during *testing* if Authentication is tested more than once, then
         //the fact that phpCAS uses a static global initialization can
         //cause problems
-        phpCAS::client(CAS_VERSION_2_0, $settings['hostname'], $settings['port'], $settings['uri'], $settings['service_base_url']);
-
+        if (!phpCAS::isInitialized()) {
+		phpCAS::client(CAS_VERSION_2_0, $settings['hostname'], $settings['port'], $settings['uri'], $settings['service_base_url']);
+	}
         if (!empty($settings['curlopts'])) {
             foreach ($settings['curlopts'] as $key => $val) {
                 phpCAS::setExtraCurlOption($key, $val);
